@@ -113,8 +113,6 @@ __host__ freqData countVisibilities(char * MS_name, Field *&fields)
         return freqsAndVisibilities;
 }
 
-
-
 __host__ canvasVariables readCanvas(char *canvas_name, fitsfile *&canvas, float b_noise_aux, int status_canvas, int verbose_flag)
 {
         status_canvas = 0;
@@ -407,7 +405,6 @@ __host__ void readMCNoiseSubsampledMS(char *MS_name, Field *fields, freqData dat
 
 }
 
-
 __host__ void readMS(char *MS_name, Field *fields, freqData data)
 {
 
@@ -521,8 +518,6 @@ __host__ void MScopy(char const *in_dir, char const *in_dir_dest, int verbose_fl
   }
 
 }
-
-
 
 __host__ void residualsToHost(Field *fields, freqData data, int num_gpus, int firstgpu)
 {
@@ -681,8 +676,16 @@ __host__ void writeMSSIM(char *infile, char *outfile, Field *fields, freqData da
 
 }
 
+//Con ruido
 __host__ void writeMSSIMMC(char *infile, char *outfile, Field *fields, freqData data, float factor, int verbose_flag)
 {
+        /* Extraer valores UV */
+        char str_dir_final[150] = "/home/hperez/uv_values_noise.csv";
+        FILE *visibilities_output_write = fopen(str_dir_final, "w");
+        if (visibilities_output_write == NULL)
+              exit(1);
+        fprintf(visibilities_output_write, "stokes, u, v, Vo_x (real), Vo_y (imag), Noise (real), Noise (imag), Vo_x (real) + noise, Vo_y (imag) + noise, w\n");
+
         MScopy(infile, outfile, verbose_flag);
         char* out_col = "DATA";
         string dir=outfile;
@@ -734,6 +737,19 @@ __host__ void writeMSSIMMC(char *infile, char *outfile, Field *fields, freqData 
                                                                 real_n = Normal(0.0, 1.0);
                                                                 imag_n = Normal(0.0, 1.0);
                                                                 dataCol[j][sto] = casacore::Complex(fields[f].visibilities[g].Vm[h].x + real_n * factor * (1/sqrt(weights[sto])), fields[f].visibilities[g].Vm[h].y + imag_n * factor * (1/sqrt(weights[sto])));
+
+                                                                /* Acesso a valores */
+                                                                fprintf(visibilities_output_write, "%d,", fields[f].visibilities[g].stokes[h]);
+                                                                fprintf(visibilities_output_write, "%f,", fields[f].visibilities[g].u[h]);
+                                                                fprintf(visibilities_output_write, "%f,", fields[f].visibilities[g].v[h]);
+                                                                fprintf(visibilities_output_write, "%f,", fields[f].visibilities[g].Vm[h].x);
+                                                                fprintf(visibilities_output_write, "%f,", fields[f].visibilities[g].Vm[h].y);
+                                                                fprintf(visibilities_output_write, "%f,", real_n * (1/sqrt(weights[sto])));
+                                                                fprintf(visibilities_output_write, "%f,", imag_n * (1/sqrt(weights[sto])));
+                                                                fprintf(visibilities_output_write, "%f,", fields[f].visibilities[g].Vm[h].x + real_n * (1/sqrt(weights[sto])));
+                                                                fprintf(visibilities_output_write, "%f,", fields[f].visibilities[g].Vm[h].y + imag_n * (1/sqrt(weights[sto])));
+                                                                fprintf(visibilities_output_write, "%f\n", fields[f].visibilities[g].weight[h]);
+
                                                                 h++;
                                                         }
                                                 }
