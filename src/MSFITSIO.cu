@@ -677,11 +677,11 @@ __host__ void writeMSSIM(char *infile, char *outfile, Field *fields, freqData da
 }
 
 //Con ruido
-__host__ void writeMSSIMMC(char *infile, char *outfile, Field *fields, freqData data, float factor, int verbose_flag)
+__host__ void writeMSSIMMC(char *infile, char *outfile, Field *fields, freqData data, float factor, int verbose_flag, char *uv_dir)
 {
         /* Extraer valores UV */
-        char str_dir_final[150] = "/home/hperez/uv_values_noise.csv";
-        FILE *visibilities_output_write = fopen(str_dir_final, "w");
+        // char str_dir_final[150] = "/home/hperez/Desktop/uv_values_noise.csv";
+        FILE *visibilities_output_write = fopen(uv_dir, "w");
         if (visibilities_output_write == NULL)
               exit(1);
         fprintf(visibilities_output_write, "stokes, u, v, Vo_x (real), Vo_y (imag), Noise (real), Noise (imag), Vo_x (real) + noise, Vo_y (imag) + noise, w\n");
@@ -740,8 +740,8 @@ __host__ void writeMSSIMMC(char *infile, char *outfile, Field *fields, freqData 
 
                                                                 /* Acesso a valores */
                                                                 fprintf(visibilities_output_write, "%d,", fields[f].visibilities[g].stokes[h]);
-                                                                fprintf(visibilities_output_write, "%f,", fields[f].visibilities[g].u[h]);
-                                                                fprintf(visibilities_output_write, "%f,", fields[f].visibilities[g].v[h]);
+                                                                fprintf(visibilities_output_write, "%f,", fields[f].visibilities[g].uvw[h].x);
+                                                                fprintf(visibilities_output_write, "%f,", fields[f].visibilities[g].uvw[h].y);
                                                                 fprintf(visibilities_output_write, "%f,", fields[f].visibilities[g].Vm[h].x);
                                                                 fprintf(visibilities_output_write, "%f,", fields[f].visibilities[g].Vm[h].y);
                                                                 fprintf(visibilities_output_write, "%f,", real_n * (1/sqrt(weights[sto])));

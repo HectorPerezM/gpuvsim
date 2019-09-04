@@ -103,7 +103,7 @@ __host__ void residualsToHost(Field *fields, freqData data, int num_gpus, int fi
 __host__ void readMS(char *file, char *file2, Field *fields);
 __host__ void writeMS(char *infile, char *outfile, Field *fields, freqData data, float random_probability, int verbose_flag);
 __host__ void writeMSSIM(char *infile, char *outfile, Field *fields, freqData data, int verbose_flag);
-__host__ void writeMSSIMMC(char *infile, char *outfile, Field *fields, freqData data, float factor, int verbose_flag);
+__host__ void writeMSSIMMC(char *infile, char *outfile, Field *fields, freqData data, float factor, int verbose_flag, char *uv_dir);
 __host__ void writeMSSIMSubsampled(char *infile, char *outfile, Field *fields, freqData data, float random_probability, int verbose_flag);
 __host__ void writeMSSIMSubsampledMC(char *infile, char *outfile, Field *fields, freqData data, float random_probability, float factor, int verbose_flag);
 

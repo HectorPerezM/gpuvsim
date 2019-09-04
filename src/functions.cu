@@ -201,8 +201,9 @@ __host__ Vars getOptions(int argc, char **argv) {
   variables.nu_0 = 1.0f;
   variables.noise = 0.0;
 
+
 	long next_op;
-	const char* const short_op = "hi:o:O:I:m:s:X:Y:V:r:a:F:n:";
+	const char* const short_op = "hi:o:O:I:m:s:X:Y:V:r:a:F:n:d:";
 
 	const struct option long_op[] = { //Flag for help, copyright and warranty
                                     {"help", 0, NULL, 'h' },
@@ -213,6 +214,7 @@ __host__ Vars getOptions(int argc, char **argv) {
                                     {"modin", 1, NULL, 'm' }, {"alpha", 1, NULL, 'a' }, {"nu_0", 1, NULL, 'F'},
                                     {"select", 1, NULL, 's'}, {"blockSizeX", 1, NULL, 'X'}, {"apply-noise", 1, NULL, 'n'},
                                     {"blockSizeY", 1, NULL, 'Y'}, {"blockSizeV", 1, NULL, 'V'}, {"random", 1, NULL, 'r'},
+                                    {"uv_dir", 1, NULL, 'd'},
                                     { NULL, 0, NULL, 0 }};
 
 	if (argc == 1) {
@@ -260,6 +262,10 @@ __host__ Vars getOptions(int argc, char **argv) {
             case 'a':
               variables.alpha = (char*) malloc((strlen(optarg)+1)*sizeof(char));
               strcpy(variables.alpha, optarg);
+              break;
+            case 'd':
+              variables.uv_dir = (char*) malloc((strlen(optarg)+1)*sizeof(char));
+              strcpy(variables.uv_dir, optarg);
               break;
             case 's':
               variables.select = atoi(optarg);

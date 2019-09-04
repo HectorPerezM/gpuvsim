@@ -101,6 +101,7 @@ __host__ int main(int argc, char **argv) {
   char *inputdat = variables.inputdat;
 	char *modinput = variables.modin;
   char *alphainput = variables.alpha;
+  char *uv_dir = variables.uv_dir;
   apply_noise = variables.noise;
   nu_0 = variables.nu_0;
   if(verbose_flag)
@@ -361,14 +362,14 @@ __host__ int main(int argc, char **argv) {
 	//Saving visibilities to disk
   residualsToHost(fields, data, 1, 0);
   printf("Saving residuals to MS...\n");
-
+  printf("UV DIR: %s\n", uv_dir);
 
   if(apply_noise && random_probability < 1.0){
     writeMSSIMSubsampledMC(msinput, msoutput, fields, data, random_probability, apply_noise, verbose_flag);
   }else if(random_probability < 1.0){
     writeMSSIMSubsampled(msinput, msoutput, fields, data, random_probability, verbose_flag);
   }else if(apply_noise){
-    writeMSSIMMC(msinput, msoutput, fields, data, apply_noise, verbose_flag);
+    writeMSSIMMC(msinput, msoutput, fields, data, apply_noise, verbose_flag, uv_dir);
   }else{
      writeMSSIM(msinput, msoutput, fields, data, verbose_flag);
   }

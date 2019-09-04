@@ -49,6 +49,7 @@ typedef struct variables {
   char *inputdat;
   char *modin;
   char *alpha;
+  char *uv_dir;
   int select;
   int blockSizeX;
   int blockSizeY;
